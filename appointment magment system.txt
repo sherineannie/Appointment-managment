@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment Management System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Appointment Management System</h1>
+    
+    <div class="container">
+        <h2>Schedule a New Appointment</h2>
+        <form id="appointmentForm">
+            <label for="name">Name:</label>
+            <input type="text" id="name" required>
+            
+            <label for="date">Date:</label>
+            <input type="date" id="date" required>
+
+            <label for="time">Time:</label>
+            <input type="time" id="time" required>
+            
+            <button type="submit">Schedule Appointment</button>
+        </form>
+    </div>
+
+    <div class="container">
+        <h2>Upcoming Appointments</h2>
+        <table id="appointmentTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Dynamic content will be inserted here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+
+
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+}
+
+.container {
+    margin: 20px auto;
+    width: 80%;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-top: 10px;
+}
+
+input, button {
+    padding: 10px;
+    margin-top: 5px;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+td {
+    text-align: center;
+}
+
+button.delete {
+    background-color: #f44336;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+button.delete:hover {
+    background-color: #d32f2f;
+}
+
+
+
+
+let appointments = JSON.parse(localStorage.getItem('appointments')) || [];
+function renderAppointments() {
+    const tableBody = document.querySelector('#appointmentTable tbody');
+    tableBody.innerHTML = ''; // Clear the table before re-rendering
+
+    appointments.forEach((appointment, index) => {
+        const row = `
+            <tr>
+                <td>${appointment.name}</td>
+                <td>${appointment.date}</td>
+                <td>${appointment.time}</td>
+                <td><button class="delete" onclick="deleteAppointment(${index})">Delete</button></td>
+            </tr>`;
+        tableBody.innerHTML += row;
+    });
+}
+
+document.getElementById('appointmentForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+       const name = document.getElementById('name').value;
+    const date = document.getElementById('date').value;
+    const time = document.getElementById('time').value;
+
+        const newAppointment = { name, date, time };
+
+    // Add the new appointment to the appointments array
+    appointments.push(newAppointment);
+
+    // Save the appointments array to localStorage
+    localStorage.setItem('appointments', JSON.stringify(appointments));
+
+    // Re-render the appointments table
+    renderAppointments();
+
+    // Reset the form
+    document.getElementById('appointmentForm').reset();
+});
+
+// Function to delete an appointment
+function deleteAppointment(index) {
+    // Remove the appointment from the array
+    appointments.splice(index, 1);
+
+    // Update localStorage
+    localStorage.setItem('appointments', JSON.stringify(appointments));
+
+    // Re-render the table
+    renderAppointments();
+}
+
+// Initial render of appointments on page load
+window.onload = renderAppointments;    this is my project appointment booking system tell me how to explain me this project in interview
